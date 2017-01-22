@@ -81,12 +81,12 @@ end
 
 \subsection*{b.}
 
-Yes it is possible to write a convolution in one pixel as a dot product between two vectors. You would have to convert both the image and filter matrix into a 1D array in the same way and then take the dot product of the two. You cannot write a full convolution via matrix multiplication because the image would need to have the same number of rows in its matrix as the number of columns in the filter.
+Yes, it is possible to write a convolution in one pixel as a dot product between two vectors. After flipping the filter along both axis, you would have to convert both the image and filter matrix into a 1D array in the same way and then take the dot product of the two. You cannot write a full convolution via matrix multiplication because the image would need to have the same number of rows in its matrix as the number of columns in the filter.
 
 \section*{Question 2}
 
 \subsection*{a.}
-An $m \times m$ filter requires $m^{2}$ operations per pixel. An $n \times n$ image has $n^{2}$ pixels thus the computational cost of a convolution is $O(m^{2} \times n^{2})$. If $h$ is a separable filter then then only $2m$ operations are required per pixel so the computational cost would be $O(2m \times n^{2}) = O(m \times n^{2})$.
+An $m \times m$ filter requires $m^{2}$ operations per pixel. An $n \times n$ image has $n^{2}$ pixels thus the computational cost of a convolution is $O(m^{2} \times n^{2})$. If $h$ is a separable filter then only $2m$ operations are required per pixel so the computational cost would be $O(2m \times n^{2}) = O(m \times n^{2})$.
 
 \subsection*{b.}
 We know that $\sigma  = \sqrt{\sigma^{2}_{1} + \sigma^{2}_{2}}$
@@ -114,7 +114,7 @@ img = imfilter(I, gfilter, 'conv');
 
 \newpage
 \subsection*{e.}
-If you an $x \times y$ filter and an $m \times n$ image, each pixel in the image would require $xy$ operations per pixel to perform a convolution. This means the whole image would require $(x\times y) \times (m \times n) $ operations. If the filter is separable, then the vertical filter is $x \times 1$ and the horizontal is $y \times 1$, so per pixel $x+y$ operations are required. Thus to perform convolution on the entire image it would require $(x + y) \times (m \times n)$ operations.
+If you have an $x \times y$ filter and an $m \times n$ image, each pixel in the image would require $xy$ operations per pixel to perform a convolution. This means the whole image would require $(x\times y) \times (m \times n) $ operations. If the filter is separable, then the vertical filter is $x \times 1$ and the horizontal is $y \times 1$, so per pixel $x+y$ operations are required. Thus to perform convolution on the entire image it would require $(x + y) \times (m \times n)$ operations.
 
 \subsection*{f.}
 If the Gaussian filter is an $m \times n$ matrix, then the vertical filter is $m \times 1$ and the horizontal filter is $1 \times n$. The filters would be $1\ 2\ 1$.
@@ -215,7 +215,7 @@ end
 
 \begin{figure}[h!]
 \centering
-\includegraphics[width=10cm, height=6cm]{found_waldo.png}
+\includegraphics[width=10cm, height=7cm]{found_waldo.png}
 \label{fig:sample graph}
 \end{figure}
 
@@ -235,7 +235,7 @@ imshow(edges)
 
 \begin{figure}[h!]
 \centering
-\includegraphics[width=10cm, height=7cm]{canny_court.jpg}
+\includegraphics[width=15cm, height=11cm]{canny_court.jpg}
 \label{fig:sample graph}
 \end{figure}
 
