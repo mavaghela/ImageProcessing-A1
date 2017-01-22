@@ -1,0 +1,242 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage {tikz}
+
+\title{CSC420 A1}
+\author{Mansi Vaghela}
+\date{January 2017}
+
+\begin{document}
+
+\maketitle
+
+\section*{Question 1}
+
+\subsection*{a.}
+
+\texttt{function out = q1a(I, origF)
+\newline\indent
+  F = rot90(origF);
+  \newline\indent
+  F = rot90(F);
+  \newline\indent
+  Image = imread(I);
+  \newline\indent
+  imageSize = size(Image);
+  \newline\indent
+  filterSize = size(F);
+  \newline\indent
+  result = zeros(imageSize(1), imageSize(2));
+  \newline\indent
+  padded = padarray(Image, [1 1]);
+  \newline\indent
+  for n = 1:imageSize(1);
+  \newline\indent\indent
+    for m = 1:imageSize(2);
+    \newline\indent\indent\indent
+      val = convolution(n, m, F, padded);
+      \newline\indent\indent\indent
+      result(n, m) = val;
+      \newline\indent\indent
+    end
+    \newline\indent
+  end
+  \newline\indent
+  out = result
+  \newline
+end
+\newline\newline
+function out = convolution(n, m, F, padded)
+\newline\indent
+  filterSize = size(F);
+  \newline\indent
+  val = 0;
+  \newline\indent
+  for k = 1:filterSize(1)
+  \newline\indent\indent
+  tempm = m;
+  \newline\indent\indent
+    for l = 1:filterSize(2)
+    \newline\indent\indent\indent
+      val += F(k, l) * padded(n, tempm);
+      \newline\indent\indent\indent
+      tempm++;
+     \newline\indent\indent
+     end
+     \newline\indent\indent
+     n++;
+     \newline\indent
+  end
+  \newline\indent
+  out = val;
+  \newline
+end
+}
+
+\subsection*{b.}
+
+Yes it is possible to write a convolution in one pixel as a dot product between two vectors. You would have to convert both the image and filter matrix into a 1D array in the same way and then take the dot product of the two. You cannot write a full convolution via matrix multiplication because the image would need to have the same number of rows in its matrix as the number of columns in the filter.
+
+\section*{Question 2}
+
+\subsection*{a.}
+An $m \times m$ filter requires $m^{2}$ operations per pixel. An $n \times n$ image has $n^{2}$ pixels thus the computational cost of a convolution is $O(m^{2} \times n^{2})$. If $h$ is a separable filter then then only $2m$ operations are required per pixel so the computational cost would be $O(2m \times n^{2}) = O(m \times n^{2})$.
+
+\subsection*{b.}
+We know that $\sigma  = \sqrt{\sigma^{2}_{1} + \sigma^{2}_{2}}$
+\newline\newline
+$\sigma = \sqrt{1^{2} + 3^{2}}$ = $\sqrt{10}$
+
+\subsection*{c.}
+INCOMPLETE
+\texttt{Some code}
+
+\subsection*{d.}
+\texttt{\noindent
+gfilter = fspecial('gaussian', [18, 18],  10);
+\newline
+I = imread('image.jpg');
+\newline
+img = imfilter(I, gfilter, 'conv');
+}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=7.5cm, height=8cm]{smooth_image.jpg}
+\label{fig:sample graph}
+\end{figure}
+
+
+\newpage
+\subsection*{e.}
+If you an $x \times y$ filter and an $m \times n$ image, each pixel in the image would require $xy$ operations per pixel to perform a convolution. This means the whole image would require $(x\times y) \times (m \times n) $ operations. If the filter is separable, then the vertical filter is $x \times 1$ and the horizontal is $y \times 1$, so per pixel $x+y$ operations are required. Thus to perform convolution on the entire image it would require $(x + y) \times (m \times n)$ operations.
+
+\subsection*{f.}
+If the Gaussian filter is an $m \times n$ matrix, then the vertical filter is $m \times 1$ and the horizontal filter is $1 \ times n$.
+
+\subsection*{g.}
+INCOMPLETE
+
+\section*{Question 3}
+\subsection*{a.}
+\texttt{
+\newline\noindent
+waldo = imread('waldo.png');
+\newline
+waldo = rgb2gray(waldo);
+\newline
+waldoG = imgradient(waldo);
+\newline
+waldoMaxgrad =  waldoG/max(max(waldoG));
+\newline\newline
+template = imread('template.png');
+\newline
+template = rgb2gray(template);
+\newline
+templateG = imgradient(template);
+\newline
+templateMaxgrad =  templateG/max(max(templateG));
+}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=10cm, height=6cm]{waldo_grad.png}
+\label{fig:sample graph}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=4cm, height=8cm]{template_grad.png}
+\label{fig:sample graph}
+\end{figure}
+
+
+\subsection*{b.}
+
+\texttt{\noindent
+function out = findWaldo(im, filter)
+\newline\indent
+\% convert image (and filter) to grayscale
+\newline\indent
+im\_input = im;
+\newline\indent
+im = imread(im);
+\newline\indent
+filter = imread(filter);
+\newline\newline\indent
+\% normalized cross-correlation
+\newline\indent
+out = normxcorr2(filter, im);
+\newline\newline\indent
+\% plot the cross-correlation results
+\newline\indent
+figure('position', [100,100,size(out,2),size(out,1)]);
+\newline\indent
+subplot('position',[0,0,1,1]);
+\newline\indent
+axis off;
+\newline\indent
+axis equal;
+\newline\newline\indent
+\% find the peak in response
+\newline\indent
+[y,x] = find(out == max(out(:)));
+\newline\indent
+y = y(1) - size(filter, 1) + 1;
+\newline\indent
+x = x(1) - size(filter, 2) + 1;
+\newline\newline\indent
+\% plot the detection's bounding box
+\newline\indent
+figure('position', [300,100,size(im,2),size(im,1)]);
+\newline\indent
+subplot('position',[0,0,1,1]);
+\newline\indent
+imshow(im\_input)
+\newline\indent
+axis off;
+\newline\indent
+axis equal;
+\newline\indent
+rectangle('position', [x,y,size(filter,2),size(filter,1)], 'edgecolor',
+\newline\indent
+[0.1,0.2,1], 'linewidth', 3.5);
+\newline
+end
+}
+
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=10cm, height=6cm]{found_waldo.png}
+\label{fig:sample graph}
+\end{figure}
+
+\newpage
+
+\section*{Question 4}
+\subsection*{a.}
+\texttt{\noindent
+I = imread('court.jpg');
+\newline
+I = rgb2gray(I);
+\newline
+edges = edge(I, 'canny', [0.2 0.25], 1);
+\newline
+imshow(edges)
+}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=10cm, height=7cm]{canny_court.jpg}
+\label{fig:sample graph}
+\end{figure}
+
+
+\subsection*{b.}
+INCOMPLETE
+
+
+
+
+\end{document}
