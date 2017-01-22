@@ -2,6 +2,12 @@
 \usepackage[utf8]{inputenc}
 \usepackage {tikz}
 
+
+
+
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+
+
 \title{CSC420 A1}
 \author{Mansi Vaghela}
 \date{January 2017}
@@ -88,12 +94,11 @@ We know that $\sigma  = \sqrt{\sigma^{2}_{1} + \sigma^{2}_{2}}$
 $\sigma = \sqrt{1^{2} + 3^{2}}$ = $\sqrt{10}$
 
 \subsection*{c.}
-INCOMPLETE
-\texttt{Some code}
+Honestly, I have no idea what this question even means.
 
 \subsection*{d.}
 \texttt{\noindent
-gfilter = fspecial('gaussian', [18, 18],  10);
+gfilter = fspecial('gaussian', [15, 15],  10);
 \newline
 I = imread('image.jpg');
 \newline
@@ -112,11 +117,12 @@ img = imfilter(I, gfilter, 'conv');
 If you an $x \times y$ filter and an $m \times n$ image, each pixel in the image would require $xy$ operations per pixel to perform a convolution. This means the whole image would require $(x\times y) \times (m \times n) $ operations. If the filter is separable, then the vertical filter is $x \times 1$ and the horizontal is $y \times 1$, so per pixel $x+y$ operations are required. Thus to perform convolution on the entire image it would require $(x + y) \times (m \times n)$ operations.
 
 \subsection*{f.}
-If the Gaussian filter is an $m \times n$ matrix, then the vertical filter is $m \times 1$ and the horizontal filter is $1 \ times n$.
+If the Gaussian filter is an $m \times n$ matrix, then the vertical filter is $m \times 1$ and the horizontal filter is $1 \times n$. The filters would be $1\ 2\ 1$.
 
 \subsection*{g.}
-INCOMPLETE
+Yes, the horizontal derivative of a Gaussian filter is also separable. If the Gaussian filter is represented as $f(x)g(y)$ then taking the partial derivative with respect to $x$ would give $f_{x}(x)g(y)$ which can still be separated into $f_{x}(x)$ which would be the horizontal and $g(y)$ which would be the vertical therefore it is still separable.
 
+\newpage
 \section*{Question 3}
 \subsection*{a.}
 \texttt{
@@ -146,10 +152,11 @@ templateMaxgrad =  templateG/max(max(templateG));
 
 \begin{figure}[h!]
 \centering
-\includegraphics[width=4cm, height=8cm]{template_grad.png}
+\includegraphics[width=3.5cm, height=7cm]{template_grad.png}
 \label{fig:sample graph}
 \end{figure}
 
+\newpage
 
 \subsection*{b.}
 
@@ -234,9 +241,7 @@ imshow(edges)
 
 
 \subsection*{b.}
-INCOMPLETE
 
-
-
+You would have to look for the magnitude of the gradients in the 4 different directions and make sure the lines intersect to create a rectangle. This would get rid of a lot of the other extra lines that are outside the court. The intersection of the 4 lines would have to be at the end points. Any intersections with other lines not at the end points would be ignored.
 
 \end{document}
